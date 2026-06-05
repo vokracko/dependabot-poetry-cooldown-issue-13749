@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "cooldown-repro"
+version = "0.1.0"
+description = "Minimal repro for dependabot poetry cooldown bug"
+authors = ["repro <repro@example.com>"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.13"
+pytest-reportportal = "^5.5.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
