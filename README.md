@@ -7,12 +7,20 @@ Minimal reproduction for
 but the resulting `poetry.lock` contains **5.6.8** — a release inside the 7-day `cooldown`
 window that should have been excluded.
 
+## Key detail — the dependency is in a poetry GROUP
+
+`pytest-reportportal` is declared in **`[tool.poetry.group.dev.dependencies]`**, not the
+top-level `[tool.poetry.dependencies]` table. The cooldown bypass reproduces in this layout.
+If the same dependency is moved to `[tool.poetry.dependencies]`, the resulting `poetry.lock`
+correctly stays at 5.6.7 and the bug does **not** appear — so the group declaration is essential
+to this reproduction.
+
 ## Files in this repo
 
 | File | Role |
 |------|------|
-| `pyproject.toml` | Constraint `pytest-reportportal = "^5.5.2"` (pre-update state) |
-| `poetry.lock` | Pinned at `5.5.2` (locked while 5.5.2 was the newest `^5.5.2` match) |
+| `pyproject.toml` | `pytest-reportportal = "^5.5.2"` in **`[tool.poetry.group.dev.dependencies]`** (pre-update state) |
+| `poetry.lock` | Locked at `5.5.2` (content-hash matches the `^5.5.2` pyproject) |
 | `.github/dependabot.yml` | `pip` ecosystem with `cooldown.default-days: 7` |
 
 ## Release timeline
